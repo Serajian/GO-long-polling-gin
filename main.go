@@ -28,10 +28,12 @@ func Getter(pm *longpolling.PollingManager) gin.HandlerFunc {
 		clientID := c.Param("id")
 		ch := pm.RegisterClient(clientID)
 
+		fmt.Printf("1*** client %s is registered and ready for get msg.\n", clientID)
+
 		select {
 		case msg := <-ch:
 			c.JSON(http.StatusOK, gin.H{"message": msg})
-			fmt.Println("68:", msg)
+			fmt.Printf("3*** client %s get this msg: %s.\n", clientID, msg)
 		case <-time.After(30 * time.Second):
 			pm.RemoveClient(clientID)
 			c.JSON(http.StatusGatewayTimeout, gin.H{"error": "timeout"})
@@ -53,6 +55,9 @@ func Sender(pm *longpolling.PollingManager) gin.HandlerFunc {
 			return
 		}
 		pm.SendMessage(clientID, json.Message)
+
+		fmt.Printf("2*** send this msg: '%s' to client by this id: %s.\n", json.Message, clientID)
+
 		c.JSON(http.StatusOK, gin.H{"status": "message sent"})
 	}
 }
