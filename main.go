@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-	"mohsen-go/test/longpolling"
 	"net/http"
 	"time"
 
+	"github.com/Serajian/GO-long-polling-gin/longpolling"
 	"github.com/gin-gonic/gin"
 )
 
